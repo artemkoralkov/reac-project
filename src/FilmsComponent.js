@@ -11,19 +11,20 @@ const unirest = require('unirest');
         this.addFilm = this.addFilm.bind(this);
         this.clickOnFilm = this.clickOnFilm.bind(this);
         this.onDragStart = this.onDragStart.bind(this);
-        console.log(this.props.addFilm);
+        //console.log(this.props.removeFilm);
     }
 
     removeFilm({ target }) {
-        this.setState( {value : this.state.value.filter(elem => elem.title !== target.parentNode.textContent.trim()) });
+        const id = +target.parentNode.getAttribute('data-id');
+        // будет удалять из списка если раскомментить эту строкуthis.setState( {value : this.state.value.filter(elem => elem.title !== target.parentNode.textContent.trim()) });
         // const [transferFilm] = this.state.value.filter(elem => elem.title === target.textContent.trim());
-        
-
+         this.props.removeFilm(id);
     }
     
     clickOnFilm({ target }) {
       const [film] = this.state.value.filter(elem => elem.title === target.parentNode.textContent.trim());
       this.props.updateData(film);
+      //alert(typeof target.parentNode.getAttribute('data-id'))
     }
  
     addFilm(event) {
@@ -34,7 +35,7 @@ const unirest = require('unirest');
         this.inputFilmDescription = document.getElementById('add-film-Description');
         this.inputImgSrc = document.getElementById('add-film-poster');
         //const newValue = this.state.value;
-        const {films} = this.props.films;
+        //const {films} = this.props.films;
         if (
           this.inputFilmGenre.value === '' &&
           this.inputFilmDirector.value === '' &&
@@ -63,7 +64,7 @@ const unirest = require('unirest');
             this.inputFilmName.value = '';
           return null;
         }
-        if (films.map(el => el.title).includes(this.inputFilmName.value)){
+        if (this.state.value.map(el => el.title).includes(this.inputFilmName.value)){
             this.inputFilmName.value = 'Фильм уже есть в списке';
             this.inputFilmDirector.value = '';
             this.inputFilmGenre.value = '';

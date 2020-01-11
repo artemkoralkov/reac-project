@@ -6,7 +6,7 @@ import { connect } from 'react-redux'
 import MyFilmsComponent from './MyFilmsComponent.js';
 import FilmsInformationComponent from './FilmsInformationComponent.js'
 import FilmsComponent from './FilmsComponent.js'
-import {addFilm} from './actions/FilmsAction'
+import {addFilm, removeFilm} from './actions/FilmsAction'
 
 class App extends React.Component {
   constructor(props) {
@@ -42,7 +42,7 @@ class App extends React.Component {
   	Фильмотека
     </h1>
     <main id = "app">
-    <FilmsComponent addFilm = {this.props.addFilmAction} dropFilm = {this.dropFilm} films={this.props.films} updateData={this.updateData}/>
+    <FilmsComponent removeFilm = {this.props.removeFilmAction} addFilm = {this.props.addFilmAction} dropFilm = {this.dropFilm} films={this.props.films} updateData={this.updateData}/>
     {component}
     {dropComponent}
     </main>
@@ -58,7 +58,8 @@ const mapStateToProps = store => {
 }
 const mapDispatchToProps = dispatch => {
   return{
-   addFilmAction: (title, director, genre, description, poster) => dispatch(addFilm(title, director, genre, description, poster)),
+    removeFilmAction: (id) => dispatch(removeFilm(id)),
+    addFilmAction: (title, director, genre, description, poster) => dispatch(addFilm(title, director, genre, description, poster)),
   }
 }
 

@@ -1,5 +1,6 @@
 const initialState = {
-    films:[{ key: 1,
+    films:[
+      { key: 1,
         title: 'Побег из Шоушенка',
         director: 'Фрэнк Дарабонт',
         genre: 'драма',
@@ -80,8 +81,7 @@ const initialState = {
         poster: 'https://st.kp.yandex.net/images/film_big/42664.jpg',
       },
     ],
-}
-
+};
 export function filmsReducer(state = initialState, action) {
     switch(action.type) {
         case 'ADD_FILM':
@@ -89,8 +89,12 @@ export function filmsReducer(state = initialState, action) {
             const newFilms = state.films;
             newFilms.push({key:key, title: action.payload[0], director: action.payload[1], genre: action.payload[2], description: action.payload[3], poster: action.payload[4]})
             return {...state, films: newFilms}
-            default:
-                return state;
+        case 'REMOVE_FILM':
+            //const filmsAfterRemove = state.films.filter(elem => elem.key !== action.payload);
+            console.log({...state, films: state.films.filter(elem => elem.key !== action.payload)});
+            return {...state, films: state.films.filter(elem => elem.key !== action.payload)}
+        default:
+            return state;
     }
     
 }
