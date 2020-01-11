@@ -1,8 +1,8 @@
 import React from 'react';
-import { connect } from 'react-redux';
+
 
 const unirest = require('unirest');
-export  class FilmsComponent extends React.Component {
+ export default class FilmsComponent extends React.Component {
     constructor(props){
         super(props);
         const {films} = this.props.films;
@@ -11,11 +11,12 @@ export  class FilmsComponent extends React.Component {
         this.addFilm = this.addFilm.bind(this);
         this.clickOnFilm = this.clickOnFilm.bind(this);
         this.onDragStart = this.onDragStart.bind(this);
+        console.log(this.props.addFilm);
     }
 
     removeFilm({ target }) {
         this.setState( {value : this.state.value.filter(elem => elem.title !== target.parentNode.textContent.trim()) });
-        const [transferFilm] = this.state.value.filter(elem => elem.title === target.textContent.trim());
+        // const [transferFilm] = this.state.value.filter(elem => elem.title === target.textContent.trim());
         
 
     }
@@ -32,7 +33,8 @@ export  class FilmsComponent extends React.Component {
         this.inputFilmGenre = document.getElementById('add-film-Genre');
         this.inputFilmDescription = document.getElementById('add-film-Description');
         this.inputImgSrc = document.getElementById('add-film-poster');
-        const newValue = this.state.value;
+        //const newValue = this.state.value;
+        const {films} = this.props.films;
         if (
           this.inputFilmGenre.value === '' &&
           this.inputFilmDirector.value === '' &&
@@ -46,21 +48,22 @@ export  class FilmsComponent extends React.Component {
               if (response.body.Response === 'False') {
                 this.inputFilmName.value = `${response.body.Error}, введите название на английском`;
               } else
-              newValue.push({
+              this.props.addFilm(response.body.Title, response.body.Director, response.body.Genre, response.body.Plot, response.body.Poster);
+            /*   newValue.push({
                 key: newValue.length > 0 ? newValue[newValue.length - 1].key + 1 : 1,
                 title: response.body.Title,
                 director: response.body.Director,
                 genre: response.body.Genre,
                 description: response.body.Plot,
                 poster: response.body.Poster,
-              }
-            );
-            this.setState({ value: newValue });
+              } 
+            );*/
+            //this.setState({ value: newValue });
             });
             this.inputFilmName.value = '';
           return null;
         }
-        if (this.state.value.map(el => el.title).includes(this.inputFilmName.value)){
+        if (films.map(el => el.title).includes(this.inputFilmName.value)){
             this.inputFilmName.value = 'Фильм уже есть в списке';
             this.inputFilmDirector.value = '';
             this.inputFilmGenre.value = '';
@@ -80,8 +83,12 @@ export  class FilmsComponent extends React.Component {
           if (this.inputFilmDescription.value === '') {
             return null;
           }
-        
-        newValue.push({
+          this.props.addFilm(this.inputFilmName.value,
+            this.inputFilmDirector.value,
+            this.inputFilmGenre.value,
+            this.inputFilmDescription.value,
+            this.inputImgSrc.value,);
+        /* newValue.push({
             key: newValue.length > 0 ? newValue[newValue.length - 1].key + 1 : 1,
             title: this.inputFilmName.value,
             director: this.inputFilmDirector.value,
@@ -89,8 +96,8 @@ export  class FilmsComponent extends React.Component {
             description: this.inputFilmDescription.value,
             poster: this.inputImgSrc.value,
           }
-        );
-        this.setState({ value: newValue });
+        ); */
+        // this.setState({ value: newValue });
         this.inputFilmName.value = '';
         this.inputFilmDirector.value = '';
         this.inputFilmGenre.value = '';
@@ -132,14 +139,3 @@ export  class FilmsComponent extends React.Component {
         );
     }
 }
-const mapStateToProps = store => {
-  // console.log(store);
-  return {
-    films: store.films
-  }
-}
-/* const mapDispatchToProps = dispatch => ({
-   addFilmAction: (title, director, genre, description, poster) => dispatch(addFilm(title, director, genre, description, poster)),
-  }) */
-
-export default connect(mapStateToProps/* , mapDispatchToProps */)(FilmsComponent)

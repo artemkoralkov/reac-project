@@ -2,9 +2,11 @@ import React from 'react';
 // import logo from './logo.svg';
 import './MyFilmsComponent.js'
 import './App.css';
+import { connect } from 'react-redux'
 import MyFilmsComponent from './MyFilmsComponent.js';
 import FilmsInformationComponent from './FilmsInformationComponent.js'
 import FilmsComponent from './FilmsComponent.js'
+import {addFilm} from './actions/FilmsAction'
 
 class App extends React.Component {
   constructor(props) {
@@ -40,7 +42,7 @@ class App extends React.Component {
   	Фильмотека
     </h1>
     <main id = "app">
-    <FilmsComponent dropFilm = {this.dropFilm} /* value = {this.state.value} */ updateData={this.updateData}/>
+    <FilmsComponent addFilm = {this.props.addFilmAction} dropFilm = {this.dropFilm} films={this.props.films} updateData={this.updateData}/>
     {component}
     {dropComponent}
     </main>
@@ -48,5 +50,17 @@ class App extends React.Component {
   );
 }
 }
+const mapStateToProps = store => {
+  // console.log(store);
+  return {
+    films: store.films
+  }
+}
+const mapDispatchToProps = dispatch => {
+  return{
+   addFilmAction: (title, director, genre, description, poster) => dispatch(addFilm(title, director, genre, description, poster)),
+  }
+}
 
-export default App;
+export default connect(mapStateToProps, mapDispatchToProps)(App)
+
