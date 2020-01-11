@@ -138,8 +138,8 @@ const mapStateToProps = store => {
     films: store.films
   }
 }
-const mapDispatchToProps = dispatch => ({
+/* const mapDispatchToProps = dispatch => ({
    addFilmAction: (title, director, genre, description, poster) => dispatch(addFilm(title, director, genre, description, poster)),
-  })
+  }) */
 
-export default connect(mapStateToProps, mapDispatchToProps)(FilmsComponent)
+export default connect(mapStateToProps/* , mapDispatchToProps */)(FilmsComponent)
