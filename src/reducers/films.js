@@ -92,9 +92,9 @@ const initialState = {
   draggingFilm: {},
   clickingFilm: {},
 };
-export const filmsReducer = (state = initialState, action) => {
+export default function filmsReducer(state = initialState, action) {
   switch (action.type) {
-    case 'ADD_FILM':
+    case 'ADD_FILM': {
       const key = state.films[state.films.length - 1].key + 1;
       const newFilms = state.films;
       newFilms.push({
@@ -106,19 +106,20 @@ export const filmsReducer = (state = initialState, action) => {
         poster: action.payload[4],
       });
       localStorage.setItem('filmsState', JSON.stringify(newFilms));
-      //console.log(newFilms);
       return { ...state, films: newFilms };
-    case 'REMOVE_FILM':
+    }
+    case 'REMOVE_FILM': {
       const filmsAfterRemove = state.films.filter(elem => elem.key !== action.payload);
       localStorage.setItem('filmsState', JSON.stringify(filmsAfterRemove));
-      // console.log({...state, films: filmsAfterRemove});
       return { ...state, films: filmsAfterRemove };
-    case 'DRAGGING_FILM':
-      //console.log(action.payload);
+    }
+    case 'DRAGGING_FILM': {
       return { ...state, draggingFilm: action.payload };
-    case 'CLICK_ON_FILM':
+    }
+    case 'CLICK_ON_FILM': {
       return { ...state, clickingFilm: action.payload };
+    }
     default:
       return state;
   }
-};
+}

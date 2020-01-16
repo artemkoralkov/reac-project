@@ -3,9 +3,7 @@ import React from 'react';
 export default class MyFilmsComponent extends React.Component {
   constructor(props) {
     super(props);
-    //console.log(this.props);
     this.state = { value: this.props.myFilms };
-    //console.log(this.state);
     this.onDragOver = this.onDragOver.bind(this);
     this.onDropFilm = this.onDropFilm.bind(this);
     this.removeFilm = this.removeFilm.bind(this);
@@ -29,22 +27,15 @@ export default class MyFilmsComponent extends React.Component {
     }
 
     this.props.dropFilm(this.props.film);
-    //this.setState({value: this.props.myFilms});
-    // this.setState(this.state.value);
   }
 
   removeFilm({ target }) {
     const id = +target.parentNode.getAttribute('data-id');
-    // будет удалять из списка если раскомментить эту строкуthis.setState( {value : this.state.value.filter(elem => elem.title !== target.parentNode.textContent.trim()) });
-    // const [transferFilm] = this.state.value.filter(elem => elem.title === target.textContent.trim());
     this.props.removeFilm(id);
-    this.setState({value: this.props.myFilms});
   }
 
   clearList() {
-    console.log(this.props);
     this.props.clearMyFilmsList();
-    this.setState({value: this.props.myFilms});
   }
 
   sortFilms() {
@@ -62,23 +53,18 @@ export default class MyFilmsComponent extends React.Component {
   }
 
   clickOnFilm({ target }) {
-   // console.log(this.props);
     const [film] = this.props.myFilms.filter(
-     elem => elem.title === target.parentNode.textContent.trim()
-   );
-   //console.log(film);
-   this.props.clickOnFilm(film);
-   
- }
+      elem => elem.title === target.parentNode.textContent.trim()
+    );
+    this.props.clickOnFilm(film);
+  }
+
   render() {
     let component = null;
-  //  console.log(this.props.myFilms);
     if (this.props.myFilms.length !== 0) {
       component = this.props.myFilms.map(elem => (
         <li key={JSON.stringify(elem.key)} className="film-item" data-id={elem.key}>
-          <button className="remove" onClick={this.removeFilm}>
-            {' '}
-          </button>
+          <button className="remove" onClick={this.removeFilm}></button>
           <label className="title" onClick={this.clickOnFilm}>
             {elem.title}
           </label>

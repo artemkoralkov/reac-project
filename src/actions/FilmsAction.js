@@ -31,14 +31,13 @@ export const clickOnFilm = film => {
   };
 };
 export const removeFilmFromMyFilms = id => {
-    return {
-      type: 'REMOVE_FILM_FROM_MYFILMS',
-      payload: id,
-    };
+  return {
+    type: 'REMOVE_FILM_FROM_MYFILMS',
+    payload: id,
   };
+};
 export const clearMyFilmsList = () => {
-    return {
-        type: 'CLEAR_MYFILMS_LIST'
-    }
-}
-
+  return {
+    type: 'CLEAR_MYFILMS_LIST',
+  };
+};
