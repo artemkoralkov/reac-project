@@ -3,7 +3,7 @@
     "env": {
       "browser": true
     },
-    "extends": ["airbnb-base", "prettier"],
+    "extends": ["airbnb-base", "prettier", "react-app"],
     "plugins": ["prettier"],
     "rules": {
       "prettier/prettier": ["error"]

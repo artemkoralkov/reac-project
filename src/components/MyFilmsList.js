@@ -1,10 +1,11 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
-export default class MyFilmsComponent extends React.Component {
+export default class MyFilmsList extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { value: this.props.myFilms };
     this.onDragOver = this.onDragOver.bind(this);
+    this.onDragLeave = this.onDragLeave.bind(this);
     this.onDropFilm = this.onDropFilm.bind(this);
     this.removeFilm = this.removeFilm.bind(this);
     this.clickOnFilm = this.clickOnFilm.bind(this);
@@ -12,26 +13,30 @@ export default class MyFilmsComponent extends React.Component {
     this.sortFilms = this.sortFilms.bind(this);
   }
 
-  onDragOver = event => {
+  onDragOver(event) {
     event.preventDefault();
-  };
+    const dragOverLabel = event.target;
+    dragOverLabel.style.opacity = 0.5;
+    return this;
+  }
+
+  onDragLeave(event) {
+    event.preventDefault();
+    const dragLeaveLabel = event.target;
+    dragLeaveLabel.style.opacity = 1;
+    return this;
+  }
 
   onDropFilm(event) {
     event.preventDefault();
-    if (this.props.myfilms === undefined) {
-      this.props.dropFilm(this.props.film);
-      return;
-    }
-    if (!this.props.myfilms.map(element => element.title).includes(this.props.film.title)) {
-      return;
-    }
-
+    const dropFilmLabel = event.target;
+    dropFilmLabel.style.opacity = 1;
     this.props.dropFilm(this.props.film);
   }
 
   removeFilm({ target }) {
     const id = +target.parentNode.getAttribute('data-id');
-    this.props.removeFilm(id);
+    this.props.removeFilmFromMyFilms(id);
   }
 
   clearList() {
@@ -39,31 +44,23 @@ export default class MyFilmsComponent extends React.Component {
   }
 
   sortFilms() {
-    this.setState(
-      this.props.myFilms.sort((a, b) => {
-        if (a.title > b.title) {
-          return 1;
-        }
-        if (a.title < b.title) {
-          return -1;
-        }
-        return 0;
-      })
-    );
+    this.props.sortMyFilmsList(this.props.myFilmsList);
   }
 
   clickOnFilm({ target }) {
-    const [film] = this.props.myFilms.filter(
+    const [film] = this.props.myFilmsList.filter(
       elem => elem.title === target.parentNode.textContent.trim()
     );
+
     this.props.clickOnFilm(film);
   }
 
   render() {
     let component = null;
-    if (this.props.myFilms.length !== 0) {
-      component = this.props.myFilms.map(elem => (
-        <li key={JSON.stringify(elem.key)} className="film-item" data-id={elem.key}>
+
+    if (this.props.myFilmsList.length !== 0) {
+      component = this.props.myFilmsList.map(elem => (
+        <li key={JSON.stringify(elem.id)} className="film-item" data-id={elem.id}>
           <button className="remove" onClick={this.removeFilm}></button>
           <label className="title" onClick={this.clickOnFilm}>
             {elem.title}
@@ -75,8 +72,9 @@ export default class MyFilmsComponent extends React.Component {
       <div id="my-Films">
         <h1>Мои фильмы</h1>
         <ul
-          onDragOver={e => this.onDragOver(e)}
-          onDrop={e => this.onDropFilm(e)}
+          onDragOver={this.onDragOver}
+          onDragLeave={this.onDragLeave}
+          onDrop={this.onDropFilm}
           id="my-films-list"
         >
           {component}
@@ -93,3 +91,13 @@ export default class MyFilmsComponent extends React.Component {
     );
   }
 }
+
+MyFilmsList.propTypes = {
+  myFilmsList: PropTypes.array,
+  film: PropTypes.object,
+  dropFilm: PropTypes.func,
+  clickOnFilm: PropTypes.func,
+  removeFilmFromMyFilms: PropTypes.func,
+  clearMyFilmsList: PropTypes.func,
+  sortMyFilmsList: PropTypes.func,
+};
